@@ -29,6 +29,7 @@
             width: 90%;
             position: relative;
             z-index: 10;
+            transition: all 0.5s ease;
         }
 
         .image-frame {
@@ -80,16 +81,38 @@
             position: relative;
         }
 
-        #success-screen {
+        /* Pop-up Modal Styles */
+        #success-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: white;
+            padding: 2rem;
+            border-radius: 2rem;
+            box-shadow: 0 0 100px rgba(255, 20, 147, 0.5);
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 80%;
+            max-width: 350px;
+        }
+
+        #success-modal.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #ff69b4;
-            color: white;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
         }
 
         .heart {
@@ -98,11 +121,26 @@
             animation: float 4s linear forwards;
             pointer-events: none;
             opacity: 0;
+            z-index: 1001;
         }
 
         @keyframes float {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #ff1493;
+            z-index: 1002;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
@@ -120,12 +158,18 @@
         </div>
     </div>
 
-    <div id="success-screen">
-        <h1 style="color: white; font-size: 3rem;">YAAAY! ❤️</h1>
-        <div class="image-frame" style="border-color: white;">
+    <div class="modal-overlay" id="overlay"></div>
+    
+    <div id="success-modal">
+        <h2 style="color: #ff1493; font-size: 2rem; margin-bottom: 1rem;">IT'S A DATE! ❤️</h2>
+        <div class="image-frame" style="width: 150px; height: 150px;">
             <img src="gf.png" alt="My GF" class="gf-photo" onerror="this.src='https://via.placeholder.com/200?text=Girlfriend+Photo'">
         </div>
-        <p style="color: white; font-size: 1.5rem;">I knew you'd say yes! 😍</p>
+        <p style="color: #ff69b4; font-size: 1.1rem; margin-bottom: 1.5rem;">
+            You made me the happiest person ever! 💖<br>
+            Prepare for the best date of your life!
+        </p>
+        <button class="yes-btn" onclick="closeModal()">I'm Ready! 😘</button>
     </div>
 
     <script>
@@ -141,19 +185,60 @@
         }
 
         function sayYes() {
-            document.getElementById('main-card').style.display = 'none';
-            document.getElementById('success-screen').style.display = 'flex';
+            // Show Modal and Overlay
+            const modal = document.getElementById('success-modal');
+            const overlay = document.getElementById('overlay');
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
             
-            // Floating hearts animation
-            setInterval(() => {
+            // Trigger animation after display block
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+            // Celebration effects
+            startCelebration();
+        }
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.remove('show');
+            document.getElementById('overlay').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('success-modal').style.display = 'none';
+            }, 400);
+        }
+
+        function startCelebration() {
+            // Floating hearts
+            const heartInterval = setInterval(() => {
+                if(!document.getElementById('overlay').style.display || document.getElementById('overlay').style.display === 'none') {
+                    clearInterval(heartInterval);
+                    return;
+                }
                 const heart = document.createElement('div');
                 heart.innerHTML = '❤️';
                 heart.className = 'heart';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
                 document.body.appendChild(heart);
                 setTimeout(() => heart.remove(), 4000);
-            }, 200);
+            }, 150);
+
+            // Confetti
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = ['#ff1493', '#ff69b4', '#ffb6c1', '#ffffff'][Math.floor(Math.random() * 4)];
+                    confetti.style.width = (Math.random() * 8 + 5) + 'px';
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 20);
+            }
         }
     </script>
 </body>
