@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Love ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
@@ -17,24 +17,26 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            width: 100vw;
+            touch-action: manipulation; /* Prevents double-tap zoom delay */
         }
 
         .container {
             background-color: white;
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 2rem;
             box-shadow: 0 15px 40px rgba(255, 105, 180, 0.2);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            max-width: 350px;
+            width: 85%;
             position: relative;
             z-index: 10;
             transition: all 0.5s ease;
         }
 
         .image-frame {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             margin: 0 auto 1.5rem;
             border-radius: 50%;
             overflow: hidden;
@@ -48,23 +50,25 @@
             object-fit: cover;
         }
 
-        h1 { color: #ff1493; font-size: 1.8rem; margin-bottom: 0.5rem; }
-        p { color: #ff69b4; margin-bottom: 2rem; }
+        h1 { color: #ff1493; font-size: 1.5rem; margin-bottom: 0.5rem; }
+        p { color: #ff69b4; margin-bottom: 1.5rem; font-size: 1rem; }
 
         .btn-group {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 0.8rem 1.8rem;
-            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
             border-radius: 1.5rem;
             border: none;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.2s;
+            min-width: 100px;
         }
 
         .yes-btn {
@@ -73,12 +77,11 @@
             box-shadow: 0 4px 10px rgba(255, 20, 147, 0.3);
         }
 
-        .yes-btn:hover { transform: scale(1.1); background-color: #ff69b4; }
-
         .no-btn {
             background-color: #808080;
             color: white;
             position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         /* Pop-up Modal Styles */
@@ -89,7 +92,7 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
             background: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 2rem;
             box-shadow: 0 0 100px rgba(255, 20, 147, 0.5);
             text-align: center;
@@ -97,7 +100,7 @@
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 80%;
-            max-width: 350px;
+            max-width: 300px;
         }
 
         #success-modal.show {
@@ -110,14 +113,23 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             z-index: 999;
+        }
+
+        /* Mobile Specific Adjustments */
+        @media (max-width: 480px) {
+            .container { padding: 1.5rem; }
+            .image-frame { width: 150px; height: 150px; }
+            h1 { font-size: 1.3rem; }
+            p { font-size: 0.9rem; }
+            button { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
         }
 
         .heart {
             position: absolute;
-            font-size: 2rem;
+            font-size: 1.5rem;
             animation: float 4s linear forwards;
             pointer-events: none;
             opacity: 0;
@@ -125,15 +137,14 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
 
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            background-color: #ff1493;
+            width: 8px;
+            height: 8px;
             z-index: 1002;
             animation: confetti-fall 3s linear forwards;
         }
@@ -154,20 +165,19 @@
         <p>Will you go on a date with me? ❤️</p>
         <div class="btn-group">
             <button class="yes-btn" onclick="sayYes()">YES! 😍</button>
-            <button class="no-btn" id="noButton" onmouseover="moveButton()">No 🥺</button>
+            <button class="no-btn" id="noButton" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton()">No 🥺</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="overlay"></div>
     
     <div id="success-modal">
-        <h2 style="color: #ff1493; font-size: 2rem; margin-bottom: 1rem;">IT'S A DATE! ❤️</h2>
-        <div class="image-frame" style="width: 150px; height: 150px;">
+        <h2 style="color: #ff1493; font-size: 1.5rem; margin-bottom: 1rem;">IT'S A DATE! ❤️</h2>
+        <div class="image-frame" style="width: 120px; height: 120px;">
             <img src="gf.png" alt="My GF" class="gf-photo" onerror="this.src='https://via.placeholder.com/200?text=Girlfriend+Photo'">
         </div>
-        <p style="color: #ff69b4; font-size: 1.1rem; margin-bottom: 1.5rem;">
-            You made me the happiest person ever! 💖<br>
-            Prepare for the best date of your life!
+        <p style="color: #ff69b4; font-size: 0.9rem; margin-bottom: 1.5rem;">
+            You made me the happiest person ever! 💖
         </p>
         <button class="yes-btn" onclick="closeModal()">I'm Ready! 😘</button>
     </div>
@@ -175,28 +185,29 @@
     <script>
         function moveButton() {
             const btn = document.getElementById('noButton');
-            const margin = 100;
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - margin);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - margin);
+            const margin = 50;
+            const maxX = window.innerWidth - btn.offsetWidth - margin;
+            const maxY = window.innerHeight - btn.offsetHeight - margin;
+            
+            const x = Math.max(margin, Math.random() * maxX);
+            const y = Math.max(margin, Math.random() * maxY);
             
             btn.style.position = 'fixed';
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
+            btn.style.zIndex = '100';
         }
 
         function sayYes() {
-            // Show Modal and Overlay
             const modal = document.getElementById('success-modal');
             const overlay = document.getElementById('overlay');
             modal.style.display = 'block';
             overlay.style.display = 'block';
             
-            // Trigger animation after display block
             setTimeout(() => {
                 modal.classList.add('show');
             }, 10);
             
-            // Celebration effects
             startCelebration();
         }
 
@@ -209,9 +220,9 @@
         }
 
         function startCelebration() {
-            // Floating hearts
             const heartInterval = setInterval(() => {
-                if(!document.getElementById('overlay').style.display || document.getElementById('overlay').style.display === 'none') {
+                const overlay = document.getElementById('overlay');
+                if(!overlay || overlay.style.display === 'none') {
                     clearInterval(heartInterval);
                     return;
                 }
@@ -219,25 +230,24 @@
                 heart.innerHTML = '❤️';
                 heart.className = 'heart';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 document.body.appendChild(heart);
                 setTimeout(() => heart.remove(), 4000);
-            }, 150);
+            }, 200);
 
-            // Confetti
-            for(let i=0; i<50; i++) {
+            for(let i=0; i<40; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
                     confetti.style.left = Math.random() * 100 + 'vw';
                     confetti.style.backgroundColor = ['#ff1493', '#ff69b4', '#ffb6c1', '#ffffff'][Math.floor(Math.random() * 4)];
-                    confetti.style.width = (Math.random() * 8 + 5) + 'px';
+                    confetti.style.width = (Math.random() * 6 + 4) + 'px';
                     confetti.style.height = confetti.style.width;
                     confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
                     document.body.appendChild(confetti);
                     setTimeout(() => confetti.remove(), 3000);
-                }, i * 20);
+                }, i * 30);
             }
         }
     </script>
