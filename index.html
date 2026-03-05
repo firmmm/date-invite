@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff0f5;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 2rem;
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .image-frame {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #ff1493;
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.3);
+        }
+
+        .gf-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 { color: #ff1493; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        p { color: #ff69b4; margin-bottom: 2rem; }
+
+        .btn-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 0.8rem 1.8rem;
+            font-size: 1.1rem;
+            border-radius: 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .yes-btn {
+            background-color: #ff1493;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 20, 147, 0.3);
+        }
+
+        .yes-btn:hover { transform: scale(1.1); background-color: #ff69b4; }
+
+        .no-btn {
+            background-color: #808080;
+            color: white;
+            position: relative;
+        }
+
+        #success-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #ff69b4;
+            color: white;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 4s linear forwards;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-card">
+        <h1>Hey Beautiful... 🌹</h1>
+        <div class="image-frame">
+            <img src="gf.png" alt="My GF" class="gf-photo" onerror="this.src='https://via.placeholder.com/200?text=Girlfriend+Photo'">
+        </div>
+        <p>Will you go on a date with me? ❤️</p>
+        <div class="btn-group">
+            <button class="yes-btn" onclick="sayYes()">YES! 😍</button>
+            <button class="no-btn" id="noButton" onmouseover="moveButton()">No 🥺</button>
+        </div>
+    </div>
+
+    <div id="success-screen">
+        <h1 style="color: white; font-size: 3rem;">YAAAY! ❤️</h1>
+        <div class="image-frame" style="border-color: white;">
+            <img src="gf.png" alt="My GF" class="gf-photo" onerror="this.src='https://via.placeholder.com/200?text=Girlfriend+Photo'">
+        </div>
+        <p style="color: white; font-size: 1.5rem;">I knew you'd say yes! 😍</p>
+    </div>
+
+    <script>
+        function moveButton() {
+            const btn = document.getElementById('noButton');
+            const margin = 100;
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - margin);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - margin);
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function sayYes() {
+            document.getElementById('main-card').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'flex';
+            
+            // Floating hearts animation
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, 200);
+        }
+    </script>
+</body>
+</html>
